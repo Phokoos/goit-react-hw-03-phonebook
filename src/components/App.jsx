@@ -7,6 +7,8 @@ import ContactForm from './ContactForm/contactForm';
 import ContactList from './ContactList/contactList';
 import Filter from './Filter/filter';
 
+const LOCAL_CONTACTS_LIST = 'contactsList';
+
 class App extends Component {
   state = {
     contacts: [],
@@ -36,6 +38,30 @@ class App extends Component {
 
     event.currentTarget.reset();
   };
+
+  componentDidMount() {
+    let localData = [];
+    try {
+      localData = JSON.parse(localStorage.getItem(LOCAL_CONTACTS_LIST));
+    } catch (error) {
+      console.log(error);
+    }
+
+    if (localData) {
+      if (localData !== []) {
+        this.setState({
+          contacts: [...localData.contacts],
+        });
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { contacts } = this.state;
+
+    if (prevState.contacts.length !== contacts.length)
+      localStorage.setItem(LOCAL_CONTACTS_LIST, JSON.stringify({ contacts }));
+  }
 
   handleInputChange = event => {
     const { name, value } = event.target;
