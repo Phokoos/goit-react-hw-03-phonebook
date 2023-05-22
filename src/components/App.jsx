@@ -21,7 +21,11 @@ class App extends Component {
     const { contacts } = this.state;
     const { name, number } = event.target;
 
-    if (contacts.map(contact => contact.name).includes(name.value)) {
+    if (
+      contacts
+        .map(contact => contact.name.toLowerCase())
+        .includes(name.value.toLowerCase())
+    ) {
       return alert(`Name ${name.value} is already here`);
     }
 
